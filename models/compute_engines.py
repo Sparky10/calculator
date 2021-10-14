@@ -1,7 +1,12 @@
 class ComputeError(Exception):
     pass
 
-class ComputeEngine:
+
+class SimpleComputeEngine:
+    """
+    The simple compute engine expects integer, operator, integer delimited by a single space
+    """
+    
     def __init__(self):
         self._left_operand = None
         self._right_operand = None
@@ -60,4 +65,11 @@ class ComputeEngine:
             raise ComputeError('Unable to calculate for unknown operator ', self._operator)
 
 
-            
+class ComplexComputeEngine(SimpleComputeEngine):
+    """
+    The complex compute engine can handle float operands and adds power(**) and modulus(%) operators.  
+    There is also no need to include spaces in the input formula.
+    """
+    def __init__(self):
+        super().__init__() 
+

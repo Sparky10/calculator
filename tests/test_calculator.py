@@ -4,7 +4,8 @@ import sys
 sys.path.append('..')
 
 from models.calculator import Calculator
-from models.compute_engines import ComputeEngine
+from models.compute_engines import SimpleComputeEngine
+from models.compute_engines import ComplexComputeEngine
 from models.compute_engines import ComputeError
 from services.compute_service import ComputeService
 
@@ -40,30 +41,91 @@ class TestEngine(unittest.TestCase):
     def test_inject_compute_engine(self):
         """
         Test that a compute service can return a compute engine to carry out the work
+        Test for both Simple and Complex engines
         """
-        compute_engine = ComputeService().inject_compute_engine()
-        self.assertIsInstance(compute_engine, ComputeEngine, "Could not fetch engine from the compute service.")
+        simple_compute_engine = ComputeService().inject_compute_engine('simple')
+        self.assertIsInstance(simple_compute_engine, SimpleComputeEngine, "Could not fetch simple engine from the compute service.")
 
-    def test_parse(self):
+        complex_compute_engine = ComputeService().inject_compute_engine('complex')
+        self.assertIsInstance(complex_compute_engine, ComplexComputeEngine, "Could not fetch complex engine from the compute service.")
+
+
+    def test_simple_engine_parse(self):
         """
-        Test we can parse input and detect malformed requests
+        Test the simple engine can parse input and detect malformed requests
         Assume we are aiming for a simple 'operand operator operand' input delimited by spaces
         """
-        compute_engine = ComputeService().inject_compute_engine()
+        simple_compute_engine = ComputeService().inject_compute_engine('simple')
         
         try:
-            compute_engine.parse('foo + 3')
+            simple_compute_engine.parse('foo + 3')
         except ComputeError as err:
             self.assertTrue(True)
         else:
             self.assertTrue(False,'Operand parse error not caught')
 
         try:
-            compute_engine.parse('5 foo 3')
+            simple_compute_engine.parse('5 foo 3')
         except ComputeError as err:
             self.assertTrue(True)
         else:
             self.assertTrue(False,'Operator parse error not caught')
+
+        try:
+            simple_compute_engine.parse('5.3 * 2.6')
+        except ComputeError as err:
+            self.assertTrue(True)
+        else:
+            self.assertTrue(False,'Operator parse error for floats not caught by simple engine')
+
+        try:
+            simple_compute_engine.parse('5 + 3')
+        except ComputeError as err:
+            self.assertTrue(False,'Simple compute engine could not parse well formed input')
+        else:
+            self.assertTrue(True)
+
+
+
+    def test_complex_engine_parse(self):
+        """
+        Test the complex engine can parse input and detect malformed requests
+        The complex engine adds power(^) and modulus(%) operators and can deal with floats and does not need space delimiters
+        """
+        complex_compute_engine = ComputeService().inject_compute_engine('simple')
+        
+        try:
+            complex_compute_engine.parse('foo + 3')
+        except ComputeError as err:
+            self.assertTrue(True)
+        else:
+            self.assertTrue(False,'Operand parse error not caught')
+
+        try:
+            complex_compute_engine.parse('5 foo 3')
+        except ComputeError as err:
+            self.assertTrue(True)
+        else:
+            self.assertTrue(False,'Operator parse error not caught')
+
+        try:
+            complex_compute_engine.parse('5.3 * 2.6')
+        except ComputeError as err:
+            self.assertTrue(False, 'Complex engine unable to parse floats')
+        else:
+            self.assertTrue(True)
+
+        try:
+            complex_compute_engine.parse('5 ^ 3')
+        except ComputeError as err:
+            self.assertTrue(False,'Simple compute engine could not parse well formed input')
+        else:
+            self.assertTrue(True)
+
+
+
+
+
 
     def test_parse_results(self):
         """
