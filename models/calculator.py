@@ -1,3 +1,6 @@
+from services.compute_service import ComputeService
+from models.compute_engines import ComputeError
+
 class Calculator:
     """
     A class representing a calculator.
@@ -16,6 +19,15 @@ class Calculator:
 
     def calculate(self):
 
-        return self.__answer
+        try:
+            compute_engine = ComputeService().inject_compute_engine()
+            compute_engine.parse(self.__raw_input)
+        except ComputeError as err:
+            raise ComputeError('A compute error occured during parse: ', err)
+        else:
+            try:
+                self.__answer = compute_engine.make_calculation()
+            except ComputeError as err:
+                raise ComputeError('A compute error occured during calculation: ', err)
 
 
