@@ -28,12 +28,33 @@ class TestCalculator(unittest.TestCase):
 
     def test_calculations(self):
         """
-        Test calculations produce the expected answers
+        Test calculations produce the expected answers using the complex engine (default)
         """
         calculator = Calculator()
+
         raw_input = calculator.set_raw_input('5 + 3')
         calculator.calculate()
-        self.assertEqual(calculator.get_answer(), 8, 'Calculated answer was incorrect for: ' + raw_input)
+        self.assertEqual(calculator.get_answer(), 8, 'Calculated add answer was incorrect for: ' + raw_input)
+
+        raw_input = calculator.set_raw_input('5 - 3')
+        calculator.calculate()
+        self.assertEqual(calculator.get_answer(), 2, 'Calculated subtract answer was incorrect for: ' + raw_input)
+
+        raw_input = calculator.set_raw_input('5 * 3')
+        calculator.calculate()
+        self.assertEqual(calculator.get_answer(), 15, 'Calculated multiply answer was incorrect for: ' + raw_input)
+
+        raw_input = calculator.set_raw_input('6 / 3')
+        calculator.calculate()
+        self.assertEqual(calculator.get_answer(), 2, 'Calculated divide answer was incorrect for: ' + raw_input)
+
+        raw_input = calculator.set_raw_input('5 ^ 3')
+        calculator.calculate()
+        self.assertEqual(calculator.get_answer(), 125, 'Calculated power answer was incorrect for: ' + raw_input)
+
+        raw_input = calculator.set_raw_input('5 % 3')
+        calculator.calculate()
+        self.assertEqual(calculator.get_answer(), 2, 'Calculated modulus answer was incorrect for: ' + raw_input)
 
 
 class TestEngine(unittest.TestCase):
@@ -62,14 +83,14 @@ class TestEngine(unittest.TestCase):
         except ComputeError as err:
             self.assertTrue(True)
         else:
-            self.assertTrue(False,'Operand parse error not caught')
+            self.assertTrue(False,'Operand parse error not caught by simple engine')
 
         try:
             simple_compute_engine.parse('5 foo 3')
         except ComputeError as err:
             self.assertTrue(True)
         else:
-            self.assertTrue(False,'Operator parse error not caught')
+            self.assertTrue(False,'Operator parse error not caught by simple engine')
 
         try:
             simple_compute_engine.parse('5.3 * 2.6')
@@ -86,27 +107,26 @@ class TestEngine(unittest.TestCase):
             self.assertTrue(True)
 
 
-
     def test_complex_engine_parse(self):
         """
         Test the complex engine can parse input and detect malformed requests
         The complex engine adds power(^) and modulus(%) operators and can deal with floats and does not need space delimiters
         """
-        complex_compute_engine = ComputeService().inject_compute_engine('simple')
+        complex_compute_engine = ComputeService().inject_compute_engine('complex')
         
         try:
             complex_compute_engine.parse('foo + 3')
         except ComputeError as err:
             self.assertTrue(True)
         else:
-            self.assertTrue(False,'Operand parse error not caught')
+            self.assertTrue(False,'Operand parse error not caught by complex engine')
 
         try:
             complex_compute_engine.parse('5 foo 3')
         except ComputeError as err:
             self.assertTrue(True)
         else:
-            self.assertTrue(False,'Operator parse error not caught')
+            self.assertTrue(False,'Operator parse error not caught by complex engine')
 
         try:
             complex_compute_engine.parse('5.3 * 2.6')
@@ -118,13 +138,9 @@ class TestEngine(unittest.TestCase):
         try:
             complex_compute_engine.parse('5 ^ 3')
         except ComputeError as err:
-            self.assertTrue(False,'Simple compute engine could not parse well formed input')
+            self.assertTrue(False,'Complex compute engine could not parse well formed input')
         else:
             self.assertTrue(True)
-
-
-
-
 
 
     def test_parse_results(self):
@@ -143,10 +159,6 @@ class TestEngine(unittest.TestCase):
             self.assertEqual(parsed_data['left_operand'], 5, "Could not parse left operand correctly")
             self.assertEqual(parsed_data['right_operand'], 3, "Could not parse right operand correctly")
             self.assertEqual(parsed_data['operator'], '+', "Could not parse operator correctly")
-
-
-
-
 
 
 if __name__ == '__main__':

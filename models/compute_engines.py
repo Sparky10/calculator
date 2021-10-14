@@ -1,3 +1,5 @@
+import re
+
 class ComputeError(Exception):
     pass
 
@@ -67,9 +69,47 @@ class SimpleComputeEngine:
 
 class ComplexComputeEngine(SimpleComputeEngine):
     """
-    The complex compute engine can handle float operands and adds power(**) and modulus(%) operators.  
+    The complex compute engine can handle float operands and adds power(^) and modulus(%) operators.  
     There is also no need to include spaces in the input formula.
     """
     def __init__(self):
         super().__init__() 
+        # Add two new permitted operators, power(^) and modulus(%)
 
+        self._permitted_operators.append('^')
+        self._permitted_operators.append('%')
+
+    def split_input_string(self, input_string):
+        # Upgrade string parsing to use regex rather than just splitting on spaces.
+
+        input_string = input_string.replace(' ', '')
+        match = re.search("(\d*\.?\d*)([\+|\-|\^|\/|\%|\*])(\d*\.?\d*)", input_string)
+
+        if match:
+            parse_result = []
+            parse_result.append(match.group(1))
+            parse_result.append(match.group(2))
+            parse_result.append(match.group(3))
+
+            return parse_result
+        else:
+            raise ComputeError('Unable to parse input in complex engine: ', input_string)
+
+    def parse_operands(self, left, right):
+        # Change the operand parsing to accept floating point numbers
+
+        try:
+            self._left_operand = float(left)
+            self._right_operand = float(right)
+        except:
+            raise ComputeError('Operands were not floating point numbers')
+
+    def make_calculation(self):
+        # Extend the calculation capability for the two extra operators
+
+        if self._operator == '^':
+            return self._left_operand ** self._right_operand
+        elif self._operator == '%':
+            return self._left_operand % self._right_operand
+        else:
+            return super().make_calculation()

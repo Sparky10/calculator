@@ -10,8 +10,8 @@ class ComputeService(Service):
 
     # This could be set in a number if ways, such as an environment variable
     # Here we allow over-riding by passing as an argument to the injector method
-    
-    ENGINE = 'simple'
+
+    ENGINE = 'complex'
 
     def __init__(self):
         super().__init__()
