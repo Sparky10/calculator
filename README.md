@@ -33,7 +33,8 @@ The ComputeEngine models handle parsing and calculations.  There are two compute
 
 The ComplexComputeEngine is a subclass of the SimpleComputeEngine.
 
-The simple engine provides +, -, * and / operations on integers only.  The complex engine adds ^ (power) and % (modulus) operations and can handle floats.
+The simple engine provides +, -, * and / operations on integers only.  Input must be space delimited.
+The complex engine adds ^ (power) and % (modulus) operations and can handle floats.  Space delimiting is not required for inputs.
 
 `Services`
 
