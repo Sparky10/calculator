@@ -4,6 +4,8 @@ from models.compute_engines import ComputeError
 class Calculator:
     """
     A class representing a calculator.
+    The calculator uses the ComputeService to inject a compute engine into the model.  The compute engine handles parsing and calculations.
+    There are two versions of the engine, simple and complex.  The service defaults to using the complex engine but this can be easily overridden here if needed.
     """
 
     def __init__(self):
