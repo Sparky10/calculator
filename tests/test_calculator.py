@@ -5,6 +5,7 @@ sys.path.append('..')
 
 from models.calculator import Calculator
 from models.compute_engines import ComputeEngine
+from models.compute_engines import ComputeError
 from services.compute_service import ComputeService
 
 class TestCalculator(unittest.TestCase):
