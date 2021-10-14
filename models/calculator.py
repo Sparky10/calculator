@@ -16,7 +16,6 @@ class Calculator:
 
     def calculate(self):
 
-        self.__answer = 8
-        return 8
+        return self.__answer
 
 
