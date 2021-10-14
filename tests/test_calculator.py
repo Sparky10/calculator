@@ -43,6 +43,32 @@ class TestEngine(unittest.TestCase):
         compute_engine = ComputeService().inject_compute_engine()
         self.assertIsInstance(compute_engine, ComputeEngine, "Could not fetch engine from the compute service.")
 
+    def test_parse(self):
+        """
+        Test we can parse input and detect malformed requests
+        Assume we are aiming for a simple 'operand operator operand' input delimited by spaces
+        """
+        compute_engine = ComputeService().inject_compute_engine()
+        
+        try:
+            compute_engine.parse('foo + 3')
+        except ComputeError as err:
+            self.assertTrue(True)
+        else:
+            self.assertTrue(False,'Operand parse error not caught')
+
+        try:
+            compute_engine.parse('5 foo 3')
+        except ComputeError as err:
+            self.assertTrue(True)
+        else:
+            self.assertTrue(False,'Operator parse error not caught')
+
+
+
+
+
+
 
 
 if __name__ == '__main__':
