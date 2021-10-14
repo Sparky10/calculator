@@ -4,6 +4,8 @@ import sys
 sys.path.append('..')
 
 from models.calculator import Calculator
+from models.compute_engines import ComputeEngine
+from services.compute_service import ComputeService
 
 class TestCalculator(unittest.TestCase):
 
