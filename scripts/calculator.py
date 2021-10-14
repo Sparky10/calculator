@@ -2,13 +2,27 @@ import sys
 sys.path.append('..')
 
 from models.calculator import Calculator
+from models.compute_engines import ComputeError
 
 calculator = Calculator()
+input_string = None
 
-input_string = input('--->')
+while True:
 
-calculator.set_raw_input(input_string)
-calculator.calculate()
+    input_string = input('--->')
 
-print(calculator.get_answer())
+    if input_string == 'exit':
+        break
+    if input_string == '':
+        continue
+    else:
+        try:
+            calculator.set_raw_input(input_string)
+            calculator.calculate()
+        except ComputeError as err:
+            print(err)
+        else:
+            print(calculator.get_answer())
+
+print('Goodbye!')
 
