@@ -65,7 +65,22 @@ class TestEngine(unittest.TestCase):
         else:
             self.assertTrue(False,'Operator parse error not caught')
 
+    def test_parse_results(self):
+        """
+        Test the engine parses input and correctly records operands and operators so they can be used in calculations
+        """
+        compute_engine = ComputeService().inject_compute_engine()
+        
+        try:
+            compute_engine.parse('5 + 3')
+        except ComputeError as err:
+            print('Boom!', err)
+        else:
+            parsed_data = compute_engine.get_results()
 
+            self.assertEqual(parsed_data['left_operand'], 5, "Could not parse left operand correctly")
+            self.assertEqual(parsed_data['right_operand'], 3, "Could not parse right operand correctly")
+            self.assertEqual(parsed_data['operator'], '+', "Could not parse operator correctly")
 
 
 

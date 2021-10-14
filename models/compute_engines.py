@@ -41,5 +41,3 @@ class ComputeEngine:
             self.parse_operator(results[1])
         except ComputeError as err:
             raise ComputeError(err)
-
-
