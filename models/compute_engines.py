@@ -41,3 +41,8 @@ class ComputeEngine:
             self.parse_operator(results[1])
         except ComputeError as err:
             raise ComputeError(err)
+            
+    def get_results(self):
+        return { 'left_operand' : self._left_operand, 
+                 'right_operand' : self._right_operand, 
+                 'operator' : self._operator }
