@@ -32,5 +32,16 @@ class TestCalculator(unittest.TestCase):
         self.assertEqual(calculator.get_answer(), 8, 'Calculated answer was incorrect for: ' + raw_input)
 
 
+class TestEngine(unittest.TestCase):
+
+    def test_inject_compute_engine(self):
+        """
+        Test that a compute service can return a compute engine to carry out the work
+        """
+        compute_engine = ComputeService().inject_compute_engine()
+        self.assertIsInstance(compute_engine, ComputeEngine, "Could not fetch engine from the compute service.")
+
+
+
 if __name__ == '__main__':
     unittest.main()
