@@ -1,4 +1,9 @@
 import unittest
+import sys
+
+sys.path.append('..')
+
+from models.calculator import Calculator
 
 class TestCalculator(unittest.TestCase):
 
