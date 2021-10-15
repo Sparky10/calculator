@@ -1,6 +1,6 @@
 # Python calculator
 
-The implementation of a simple calculator in Python.
+The implementation of a simple calculator in Python demonstrating SOLID and TDD principles.
 
 **To run the calculator**
 
